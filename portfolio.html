@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Jiří Žák</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --sky-top:   #a8d4f0;
+      --sky-mid:   #f0d9b5;
+      --sky-bot:   #e8956a;
+      --accent:    #c47a3a;
+      --accent2:   #2d5a27;
+      --cream:     #fdf6ec;
+      --paper:     #f5ead8;
+      --text-dark: #2c1a0e;
+      --text-mid:  #5c3a1e;
+      --text-light:#8b6040;
+      --font-display: 'Playfair Display', serif;
+      --font-body:    'Lora', serif;
+      --font-ui:      'Nunito Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--text-dark);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /*───NAV───*/
+    nav {
+      position: fixed; top: 0; right: 0;
+      padding: 26px 52px;
+      display: flex; gap: 36px; align-items: center;
+      z-index: 200;
+    }
+    nav a {
+      font-family: var(--font-ui); font-size: 12px;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,245,225,.9); text-decoration: none;
+      text-shadow: 0 1px 8px rgba(0,0,0,.5);
+      transition: color .3s;
+    }
+    nav a:hover { color: #fff; }
+    nav.dark a { color: var(--text-mid); text-shadow: none; }
+    nav.dark a:hover { color: var(--accent); }
+
+    /*───HERO───*/
+    #hero {
+      position: relative; height: 100vh; min-height: 580px;
+      overflow: hidden; background: var(--sky-top);
+    }
+
+    /*Sky gradient*/
+    .sky {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        180deg,
+        #b8ddf5 0%,
+        #ddeefa 18%,
+        #f7e8c8 45%,
+        #f5c97e 68%,
+        #e88a4a 100%
+      );
+      z-index: 1;
+    }
+
+    /*Sun glow*/
+    .sun {
+      position: absolute; z-index: 2;
+      width: 100px; height: 100px; border-radius: 50%;
+      top: 16%; left: 50%; transform: translateX(-50%);
+      background: radial-gradient(circle, #fffde0 25%, #ffd97a 55%, rgba(255,170,40,.2) 100%);
+      box-shadow: 0 0 70px 35px rgba(255,210,80,.38), 0 0 140px 70px rgba(255,160,30,.15);
+    }
+
+    /*Birds*/
+    .birds { position: absolute; z-index: 3; top: 13%; left: 28%; }
+    .bird {
+      display: inline-block; margin: 0 5px;
+      width: 16px; height: 5px;
+      border-top: 2px solid rgba(50,25,5,.3); border-radius: 50%;
+      animation: flap 2s ease-in-out infinite;
+    }
+    .bird:nth-child(2) { animation-delay:.4s; width:11px; transform:translateY(7px) translateX(4px); }
+    .bird:nth-child(3) { animation-delay:.8s; width:13px; transform:translateY(-3px) translateX(10px); }
+    @keyframes flap { 0%,100%{border-top-width:2px} 50%{border-top-width:5px} }
+
+    /*Parallax mountain layers*/
+    .layer {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      will-change: transform; line-height: 0;
+    }
+
+    .layer svg { width: 100%; display: block; }
+
+    /*Hero text*/
+    .hero-text {
+      position: absolute; bottom: 50%; left: 0; right: 0;
+      text-align: center; z-index: 40; pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-ui); font-size: 11px;
+      letter-spacing: .35em; text-transform: uppercase;
+      color: rgba(216, 180, 71, 0.85);
+      text-shadow: 0 2px 16px rgba(80,30,0,.55);
+      margin-bottom: 14px;
+    }
+    .hero-name {
+      font-family: var(--font-display); font-size: clamp(54px,9vw,118px);
+      font-weight: 700; line-height: .9; color: #fff;
+      text-shadow: 0 6px 40px rgba(80,30,0,.45), 0 2px 0 rgba(0,0,0,.12);
+      margin-bottom: 18px;
+    }
+    .hero-name em { font-style: italic; color: #ffd97a; }
+    .hero-tagline {
+      font-family: var(--font-body); font-style: italic;
+      font-size: clamp(14px,2vw,20px);
+      color: rgba(255, 230, 157, 0.85);
+      text-shadow: 0 2px 12px rgba(80,30,0,.45);
+    }
+
+    /*Scroll hint*/
+    .scroll-hint {
+      position: absolute; bottom: 28px; left: 50%;
+      transform: translateX(-50%); z-index: 40;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-hint span {
+      font-family: var(--font-ui); font-size: 10px;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(255,245,215,.7);
+      text-shadow: 0 1px 8px rgba(0,0,0,.3);
+    }
+    .s-line {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, rgba(255,245,215,.65), transparent);
+      animation: drop 2.2s ease-in-out infinite;
+    }
+    @keyframes drop {
+      0%  { transform:scaleY(0); transform-origin:top; opacity:0; }
+      50% { transform:scaleY(1); opacity:1; }
+      100%{ transform:scaleY(1); transform-origin:bottom; opacity:0; }
+    }
+
+    /*───CONTENT SECTIONS───*/
+    .section {
+      position: relative; padding: 110px 10vw;
+      background: var(--cream);
+    }
+    .section.alt { background: var(--paper); }
+
+    .eyebrow {
+      font-family: var(--font-ui); font-size: 11px;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .eyebrow::before {
+      content:''; display:block; width:30px; height:1px; background:var(--accent);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(36px,5vw,70px);
+      font-weight: 400; line-height: 1.05;
+      color: var(--text-dark); margin-bottom: 52px;
+    }
+    h2 em { font-style: italic; color: var(--accent); }
+
+    /*───ABOUT───*/
+    .about-grid {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: start;
+    }
+    .about-body p { color: var(--text-mid); font-size: 16px; line-height: 2.1; margin-bottom: 22px; }
+    .about-body p strong { color: var(--text-dark); font-weight: 500; }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 48px;
+    }
+    .stat {
+      background: var(--paper); border: 1px solid rgba(196,122,58,.15);
+      padding: 26px 18px; text-align: center;
+    }
+    .stat-n { font-family: var(--font-display); font-size: 44px; color: var(--accent); line-height: 1; }
+    .stat-l { font-family: var(--font-ui); font-size: 10px; letter-spacing: .15em; color: var(--text-light); margin-top: 4px; text-transform: uppercase; }
+
+    .portrait-wrap { position: relative; }
+    .portrait-box {
+      width: 100%; aspect-ratio: 3/4;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .portrait-box::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(255,220,150,.35) 0%, transparent 70%);
+    }
+    .portrait-init {
+      font-family: var(--font-display); font-size: 64px;
+      font-style: italic; color: rgba(255,245,220,.3); z-index:1;
+    }
+    .portrait-cap {
+      position: absolute; bottom:0; left:0; right:0; padding: 10px 14px;
+      background: rgba(44,26,14,.4);
+      font-family: var(--font-ui); font-size: 9px;
+      letter-spacing: .2em; color: rgba(255,240,210,.5);
+      text-align: right; text-transform: uppercase;
+    }
+    .pc {
+      position: absolute; width: 22px; height: 22px;
+      border-color: var(--accent); border-style: solid;
+    }
+    .pc.tl { top:-10px; left:-10px; border-width: 2px 0 0 2px; }
+    .pc.br { bottom:-10px; right:-10px; border-width: 0 2px 2px 0; }
+
+    /*───SKILLS───*/
+    .skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .skill-card {
+      background: var(--cream); border: 1px solid rgba(196,122,58,.18);
+      padding: 34px 28px; position: relative; overflow: hidden;
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 44px rgba(196,122,58,.14);
+    }
+    .skill-card::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0); transform-origin: left; transition: transform .4s ease;
+    }
+    .skill-card:hover::after { transform: scaleX(1); }
+    .skill-icon { font-size: 30px; margin-bottom: 16px; }
+    .skill-title {
+      font-family: var(--font-display); font-size: 22px; font-weight: 400;
+      margin-bottom: 10px; color: var(--text-dark);
+    }
+    .skill-desc { font-size: 14px; color: var(--text-light); line-height: 1.9; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .skill-tag {
+      font-family: var(--font-ui); font-size: 10px;
+      letter-spacing: .12em; padding: 4px 10px;
+      border: 1px solid rgba(196,122,58,.28); color: var(--text-light); border-radius: 2px;
+    }
+
+    /*───ACHIEVEMENTS───*/
+    .ach-list { display: flex; flex-direction: column; }
+    .ach-item {
+      display: grid; grid-template-columns: 88px 1fr auto;
+      gap: 46px; align-items: start;
+      padding: 40px 0; border-bottom: 1px solid rgba(196,122,58,.14);
+      transition: padding-left .3s;
+    }
+    .ach-item > div:last-child {
+      display: flex;
+      justify-content: center;
+    }
+    .ach-item:hover { padding-left: 14px; }
+    .ach-year { font-family: var(--font-ui); font-size: 12px; letter-spacing: .2em; color: var(--accent); padding-top: 5px; }
+    .ach-title { font-family: var(--font-display); font-size: 28px; font-weight: 400; margin-bottom: 10px; }
+    .ach-desc { font-size: 14px; color: var(--text-light); line-height: 2; }
+    .ach-badge {
+      font-family: var(--font-ui); font-size: 10px; letter-spacing: .15em;
+      padding: 6px 14px; border: 1px solid rgba(196,122,58,.28);
+      color: var(--text-light); white-space: nowrap; margin-top: 4px; text-transform: uppercase;
+    }
+    .ach-badge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* badge image */
+    .ach-badge-img {
+      width: 150px;
+      cursor: pointer;
+      transition: transform .25s;
+    }
+
+    .ach-badge-img:hover {
+      transform: scale(1.15);
+    }
+
+    /* lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      z-index: 999;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #lightbox img {
+      max-width: 80%;
+      max-height: 80%;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.6);
+      border-radius: 4px;
+    }
+
+    /*───CONTACT───*/
+    #contact { background: #1e100a; color: var(--cream); }
+    #contact .eyebrow { color: #f0d9b5; }
+    #contact .eyebrow::before { background: #f0d9b5; }
+    #contact h2 { color: var(--cream); }
+    #contact h2 em { color: #f0d9b5; }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+    .c-blurb { font-size: 15px; color: rgba(253,246,236,.55); line-height: 2.1; margin-bottom: 44px; }
+    .c-links { display: flex; flex-direction: column; }
+    .clink {
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 0; border-bottom: 1px solid rgba(253,246,236,.1);
+      color: rgba(253,246,236,.55); text-decoration: none;
+      font-family: var(--font-ui); font-size: 14px;
+      transition: color .3s, padding-left .3s;
+    }
+    .clink:hover { color: #f0d9b5; padding-left: 8px; }
+    .clink-lbl { flex: 1; }
+    .clink-arr { opacity: 0; transition: opacity .3s; }
+    .clink:hover .clink-arr { opacity: 1; }
+
+    .c-form { display: flex; flex-direction: column; gap: 3px; }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+    .field { display: flex; flex-direction: column; gap: 8px; }
+    .field label {
+      font-family: var(--font-ui); font-size: 10px;
+      letter-spacing: .25em; text-transform: uppercase; color: rgba(253,246,236,.35);
+    }
+    .field input, .field textarea {
+      background: rgba(253,246,236,.06); border: 1px solid rgba(253,246,236,.1);
+      padding: 14px 18px; color: var(--cream);
+      font-family: var(--font-body); font-size: 14px;
+      outline: none; resize: none; line-height: 1.7;
+      transition: border-color .3s;
+    }
+    .field input::placeholder, .field textarea::placeholder { color: rgba(253,246,236,.22); }
+    .field input:focus, .field textarea:focus { border-color: #f0d9b5; }
+    .field textarea { min-height: 108px; }
+    .send-btn {
+      margin-top: 14px; align-self: flex-start;
+      background: transparent; border: 1px solid #f0d9b5; padding: 14px 36px;
+      color: #f0d9b5; font-family: var(--font-ui);
+      font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+      cursor: pointer; transition: background .3s, color .3s;
+    }
+    .send-btn:hover { background: #f0d9b5; color: var(--text-dark); }
+
+    /*───FOOTER───*/
+    footer {
+      background: #120906; padding: 34px 10vw;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid rgba(253,246,236,.05);
+    }
+    footer span { font-family: var(--font-ui); font-size: 11px; color: rgba(253,246,236,.28); letter-spacing: .1em; }
+    footer a { font-family: var(--font-ui); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(253,246,236,.28); text-decoration: none; transition: color .3s; }
+    footer a:hover { color: #f0d9b5; }
+
+    /*───REVEAL───*/
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    /*───RESPONSIVE───*/
+    @media (max-width: 900px) {
+      nav { padding: 20px 26px; gap: 22px; }
+      .section { padding: 80px 6vw; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .ach-item { grid-template-columns: 60px 1fr; }
+      .ach-badge { display: none; }
+    }
+    @media (max-width: 560px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .f-row { grid-template-columns: 1fr; }
+      .hero-name { font-size: 42px; }
+    }
+  </style>
+</head>
+
+<!----------------------------------------------------------------------------------------------->
+
+<body>
+
+<nav id="nav">
+  <a href="#about">About</a>
+  <a href="#skills">Skills</a>
+  <a href="#achievements">Work</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-----HERO----->
+<div id="hero">
+
+  <div class="sky"></div>
+  <div class="sun" id="sun"></div>
+  <div class="birds" id="birds">
+    <div class="bird"></div><div class="bird"></div><div class="bird"></div>
+  </div>
+
+  <!-- LAYER 6 — distant pale ridges -->
+<div class="layer" id="l6" style="z-index:6;">
+  <svg viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon fill="#d4b890" opacity=".5"
+      points="0,210 0,130 80,95 200,112 320,70 440,88 560,50 680,72 800,38 920,62 1040,28 1160,54 1280,32 1380,50 1440,42 1440,210"/>
+  </svg>
+</div>
+
+<!-- LAYER 5 — far warm tan mountains -->
+<div class="layer" id="l5" style="z-index:7;">
+  <svg viewBox="0 0 1440 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon fill="#b8885a"
+      points="0,250 0,160 100,122 220,140 340,98 460,118 580,78 700,100 820,60 940,86 1060,48 1180,76 1300,50 1400,72 1440,60 1440,250"/>
+  </svg>
+</div>
+
+<!-- LAYER 4 — mid mountains with faint treeline -->
+<div class="layer" id="l4" style="z-index:8;">
+  <svg viewBox="0 0 1440 340" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon fill="#7a5030"
+      points="0,290 0,190 90,146 200,165 320,120 440,142 560,98 680,124 800,80 920,108 1040,68 1160,98 1280,62 1380,90 1440,75 1440,290"/>
+    <!-- sparse far pines -->
+    <g fill="#3a6430" opacity=".85">
+      <polygon points="50,210 38,210 44,180"/><polygon points="70,208 58,198 64,168"/>
+      <polygon points="140,200 126,200 133,168"/><polygon points="162,204 148,204 155,172"/>
+      <polygon points="250,192 236,192 243,160"/><polygon points="272,196 258,196 265,164"/>
+      <polygon points="370,182 354,182 362,150"/><polygon points="392,187 376,187 384,154"/>
+      <polygon points="480,176 464,176 472,143"/><polygon points="502,180 486,180 494,147"/>
+      <polygon points="590,166 574,166 582,132"/><polygon points="612,170 596,170 604,137"/>
+      <polygon points="700,162 684,162 692,128"/><polygon points="722,166 706,166 714,132"/>
+      <polygon points="820,152 804,152 812,118"/><polygon points="842,156 826,156 834,123"/>
+      <polygon points="940,145 924,145 932,111"/><polygon points="962,149 946,149 954,115"/>
+      <polygon points="1060,135 1044,135 1052,101"/><polygon points="1082,140 1066,140 1074,106"/>
+      <polygon points="1180,130 1164,130 1172,95"/><polygon points="1202,134 1186,134 1194,100"/>
+      <polygon points="1300,124 1284,124 1292,90"/><polygon points="1322,128 1306,128 1314,94"/>
+      <polygon points="1400,118 1384,118 1392,84"/><polygon points="1420,122 1404,122 1412,88"/>
+    </g>
+  </svg>
+</div>
+
+<!-- LAYER 3 — mid-close forested ridge -->
+<div class="layer" id="l3" style="z-index:9;">
+  <svg viewBox="0 0 1440 390" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon fill="#4a2e14" points="0,350 0,245 70,208 180,225 290,182 410,205 530,160 650,188 760,145 880,175 990,132 1110,164 1220,125 1340,156 1440,135 1440,350"/>
+    <!-- medium pines -->
+    <g fill="#2a5424">
+      <polygon points="18,255 4,255 11,224"/><polygon points="38,253 24,253 31,222"/><polygon points="58,257 44,257 51,225"/>
+      <polygon points="100,248 84,248 92,216"/><polygon points="122,252 106,252 114,220"/><polygon points="144,246 128,246 136,215"/>
+      <polygon points="198,240 182,240 190,208"/><polygon points="220,244 204,244 212,212"/><polygon points="242,238 226,238 234,207"/>
+      <polygon points="310,230 294,230 302,198"/><polygon points="332,234 316,234 324,202"/><polygon points="354,228 338,228 346,197"/>
+      <polygon points="430,220 414,220 422,188"/><polygon points="452,225 436,225 444,192"/><polygon points="474,218 458,218 466,187"/>
+      <polygon points="550,212 534,212 542,180"/><polygon points="572,216 556,216 564,183"/><polygon points="594,210 578,210 586,179"/>
+      <polygon points="670,205 654,205 662,172"/><polygon points="692,209 676,209 684,176"/><polygon points="714,202 698,202 706,170"/>
+      <polygon points="780,198 764,198 772,165"/><polygon points="802,202 786,202 794,169"/><polygon points="824,195 808,195 816,163"/>
+      <polygon points="900,190 884,190 892,157"/><polygon points="922,194 906,194 914,161"/><polygon points="944,188 928,188 936,156"/>
+      <polygon points="1010,182 994,182 1002,149"/><polygon points="1032,186 1016,186 1024,153"/><polygon points="1054,180 1038,180 1046,148"/>
+      <polygon points="1130,175 1114,175 1122,142"/><polygon points="1152,179 1136,179 1144,146"/><polygon points="1174,173 1158,173 1166,141"/>
+      <polygon points="1240,168 1224,168 1232,134"/><polygon points="1262,172 1246,172 1254,138"/><polygon points="1284,166 1268,166 1276,133"/>
+      <polygon points="1360,163 1344,163 1352,129"/><polygon points="1382,167 1366,167 1374,133"/><polygon points="1404,161 1388,161 1396,128"/>
+      <polygon points="1424,155 1410,155 1417,123"/>
+    </g>
+  </svg>
+</div>
+
+  <!-- LAYER 2 — close dark forested hill -->
+  <div class="layer" id="l2" style="z-index:10;">
+    <svg viewBox="0 0 1440 430" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      
+      <!-- dense close pines -->
+      <g fill="#1c4020">
+        <polygon points="15,345 -1,345 7,307"/><polygon points="38,343 22,343 30,305"/><polygon points="62,347 46,347 54,308"/> 
+        <polygon points="88,340 72,340 80,301"/><polygon points="112,345 96,345 104,305"/>
+        <polygon points="148,337 130,337 139,297"/><polygon points="172,342 154,342 163,301"/>
+        <polygon points="210,333 192,333 201,293"/><polygon points="236,338 218,338 227,297"/>
+        <polygon points="270,330 252,330 261,289"/><polygon points="296,335 278,335 287,294"/>
+        <polygon points="335,323 315,323 325,282"/><polygon points="362,328 342,328 352,287"/>
+        <polygon points="402,319 382,319 392,278"/><polygon points="430,324 410,324 420,283"/>
+        <polygon points="468,313 448,313 458,272"/><polygon points="496,318 476,318 486,277"/>
+        <polygon points="535,307 515,307 525,265"/><polygon points="564,312 544,312 554,270"/>
+        <polygon points="604,303 584,303 594,261"/><polygon points="632,308 612,308 622,266"/>
+        <polygon points="670,300 650,300 660,258"/><polygon points="698,305 678,305 688,263"/>
+        <polygon points="738,295 718,295 728,252"/><polygon points="766,300 746,300 756,257"/>
+        <polygon points="806,291 786,291 796,249"/><polygon points="834,296 814,296 824,254"/>
+        <polygon points="875,285 855,285 865,243"/><polygon points="904,290 884,290 894,248"/>
+        <polygon points="944,281 924,281 934,239"/><polygon points="972,286 952,286 962,244"/>
+        <polygon points="1010,277 990,277 1000,235"/><polygon points="1040,282 1020,282 1030,240"/>
+        <polygon points="1080,273 1060,273 1070,231"/><polygon points="1108,278 1088,278 1098,236"/>
+        <polygon points="1148,270 1128,270 1138,227"/><polygon points="1178,275 1158,275 1168,233"/>
+        <polygon points="1218,267 1198,267 1208,224"/><polygon points="1246,272 1226,272 1236,229"/>
+        <polygon points="1286,265 1266,265 1276,222"/><polygon points="1314,270 1294,270 1304,227"/>
+        <polygon points="1354,263 1334,263 1344,220"/><polygon points="1382,267 1362,267 1372,225"/>
+        <polygon points="1418,260 1400,260 1409,218"/>
+      </g>
+
+      <path fill="#2a1808" d="M0,420 L0,330 Q180,285 360,305 Q540,320 720,295 Q900,262 1080,288 Q1260,313 1440,275 L1440,410 Z"/>
+
+    </svg>
+  </div>
+
+  <!-- LAYER 1 — foreground ground -->
+  <div class="layer" id="l1" style="z-index:11;">
+    <svg viewBox="0 0 1440 460" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      
+      <!-- foreground pine silhouettes, tallest and darkest -->
+      <g fill="#0e2810">
+        <polygon points="8,400 -10,400 -1,354"/><polygon points="36,398 16,398 26,352"/><polygon points="66,402 46,402 56,355"/>
+        <polygon points="106,394 84,394 95,347"/><polygon points="136,399 114,399 125,351"/>
+        <polygon points="180,388 158,388 169,340"/><polygon points="212,393 190,393 201,345"/>
+        <polygon points="260,384 238,384 249,336"/><polygon points="292,389 270,389 281,341"/>
+        <polygon points="342,380 318,380 330,330"/><polygon points="376,385 352,385 364,335"/>
+        <polygon points="428,376 404,376 416,326"/><polygon points="462,381 438,381 450,331"/>
+        <polygon points="516,382 492,382 504,331"/><polygon points="550,377 526,377 538,326"/>
+        <polygon points="604,368 580,368 592,317"/><polygon points="638,373 614,373 626,322"/>
+        <polygon points="692,364 668,364 680,312"/><polygon points="726,369 702,369 714,317"/>
+        <polygon points="780,375 756,375 768,323"/><polygon points="814,380 790,380 802,328"/>
+        <polygon points="868,371 844,371 856,319"/><polygon points="902,376 878,376 890,324"/>
+        <polygon points="956,367 932,367 944,314"/><polygon points="990,372 966,372 978,319"/>
+        <polygon points="1044,363 1020,363 1032,310"/><polygon points="1078,368 1054,368 1066,315"/>
+        <polygon points="1132,369 1108,369 1120,316"/><polygon points="1166,374 1142,374 1154,321"/>
+        <polygon points="1220,367 1196,367 1208,313"/><polygon points="1254,372 1230,372 1242,318"/>
+        <polygon points="1308,365 1284,365 1296,311"/><polygon points="1342,370 1318,370 1330,316"/>
+        <polygon points="1396,363 1372,363 1384,309"/><polygon points="1428,367 1404,367 1416,313"/>
+      </g>
+      <path fill="#160c04" d="M0,475 L0,415 Q240,377 480,395 Q720,409 960,385 Q1200,365 1440,383 L1440,475 Z"/>
+    </svg>
+  </div>
+
+  <!-- Hero Text -->
+  <div class="hero-text" id="heroText">
+    <div class="hero-eyebrow">Portfolio · 2025</div>
+    <div class="hero-name">Jiří Žák</div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="s-line"></div>
+    <span>Scroll</span>
+  </div>
+</div>
+
+<!-----ABOUT------>
+<section class="section" id="about">
+  <div class="eyebrow">01 — About</div>
+  <div class="about-grid">
+    <div class="about-body reveal">
+<h2>The student<br>behind the <em>code.</em></h2>
+<p><strong>Hi, I'm Jirka.</strong> I'm a high school student passionate about technology, coding, and building cool projects. I love exploring new ideas and turning them into something real.</p>
+<p>I’m learning <strong>C++, C, HTML, JavaScript, Assembly, Python...</strong> and working on projects that mix creativity with problem-solving. Currently based in <strong>Židlochovice</strong>.</p>
+<p>When I’m not coding, I love <strong>climbing and spending time in nature</strong>. I also enjoy robotics and networking — these hobbies often inspire my best ideas!</p>
+<div class="stats">
+  <div class="stat"><div class="stat-n">2+</div><div class="stat-l">Years coding</div></div>
+  <div class="stat"><div class="stat-n">5+</div><div class="stat-l">Projects</div></div>
+  <div class="stat"><div class="stat-n">3</div><div class="stat-l">Competitions</div></div>
+  <div class="stat"><div class="stat-n">1</div><div class="stat-l">Award</div></div>
+</div>
+    </div>
+    <div class="portrait-wrap reveal" style="transition-delay:.2s">
+      <div class="portrait-box">
+        <img src="panorama.png">
+      </div>
+      <div class="pc tl"></div>
+      <div class="pc br"></div>
+    </div>
+  </div>
+</section>
+
+<!-----SKILLS------->
+<section class="section alt" id="skills">
+  <div class="eyebrow">02 — Skills</div>
+  <h2>What I<br><em>bring</em> along.</h2>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">🌲</div>
+      <div class="skill-title">Skill Category One</div>
+      <p class="skill-desc">Brief description of this area — what you do and how you approach it. Make it specific to your expertise.</p>
+      <div class="skill-tags"><span class="skill-tag">Tool A</span><span class="skill-tag">Tool B</span><span class="skill-tag">Method C</span></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.08s">
+      <div class="skill-icon">⛰️</div>
+      <div class="skill-title">Skill Category Two</div>
+      <p class="skill-desc">Another key expertise. Describe your approach and the frameworks or tools you rely on day to day.</p>
+      <div class="skill-tags"><span class="skill-tag">Tool D</span><span class="skill-tag">Tool E</span><span class="skill-tag">Method F</span></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.16s">
+      <div class="skill-icon">🌤️</div>
+      <div class="skill-title">Skill Category Three</div>
+      <p class="skill-desc">A third area where you shine. What's distinctive about how you work here?</p>
+      <div class="skill-tags"><span class="skill-tag">Tool G</span><span class="skill-tag">Method H</span><span class="skill-tag">Platform I</span></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.08s">
+      <div class="skill-icon">🦅</div>
+      <div class="skill-title">Skill Category Four</div>
+      <p class="skill-desc">More of your toolkit. Technical depth here impresses — be as specific as you like.</p>
+      <div class="skill-tags"><span class="skill-tag">Tool J</span><span class="skill-tag">Tool K</span></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.16s">
+      <div class="skill-icon">🌿</div>
+      <div class="skill-title">Skill Category Five</div>
+      <p class="skill-desc">Process, leadership, communication — the softer skills that complete the picture.</p>
+      <div class="skill-tags"><span class="skill-tag">Approach A</span><span class="skill-tag">Method B</span></div>
+    </div>
+    <div class="skill-card reveal" style="transition-delay:.24s">
+      <div class="skill-icon">🏔️</div>
+      <div class="skill-title">Skill Category Six</div>
+      <p class="skill-desc">The last piece. What completes your professional profile and sets you apart?</p>
+      <div class="skill-tags"><span class="skill-tag">Tool L</span><span class="skill-tag">Platform M</span><span class="skill-tag">Method N</span></div>
+    </div>
+  </div>
+</section>
+
+<!-----ACHIEVEMENTS------->
+<section class="section" id="achievements">
+  <div class="eyebrow">03 — Achievements</div>
+  <h2>Milestones &amp;<br><em>notable</em> work.</h2>
+  <div class="ach-list">
+    <div class="ach-item reveal">
+      <div class="ach-year">2025</div>
+      <div>
+        <div class="ach-title">2. place Samsung Innovation Sprint</div>
+        <p class="ach-desc">Samsung Innovation Sprint is a fast-paced international innovation competition focused on developing and pitching technology-driven solutions to real-world problems within a limited time. I was awarded **2nd place** for designing and presenting an original innovative concept.
+        </p>
+      </div>
+      <div class="ach-badge-wrap">
+        <div class="ach-badge">Award / Recognition</div>
+        <img src="/certifikaty/samsung innovation sprint.jpg" class="ach-badge-img expandable">
+      </div>
+    </div>
+    <div class="ach-item reveal" style="transition-delay:.1s">
+      <div class="ach-year">2023</div>
+      <div>
+        <div class="ach-title">1. place Astro Pi Challenge</div>
+        <p class="ach-desc">The European Space Agency Astro Pi Challenge is an international competition where students write programs that run on International Space Station computers. I was awarded 1st place for developing a program that was executed in space.</p>
+      </div>
+      <div class="ach-badge-wrap">
+        <div class="ach-badge">Award / Recognition</div>
+        <img src="/certifikaty/IMG_5647.JPG" class="ach-badge-img expandable">
+      </div>
+    </div>
+    <div class="ach-item reveal" style="transition-delay:.2s">
+      <div class="ach-year">2025</div>
+      <div>
+        <div class="ach-title">Third Notable Achievement</div>
+        <p class="ach-desc">What made this moment significant in your career? Each item should stand on its own merit.</p>
+      </div>
+      <div class="ach-badge">Certification</div>
+    </div>
+    <div class="ach-item reveal" style="transition-delay:.3s">
+      <div class="ach-year">2018</div>
+      <div>
+        <div class="ach-title">3. place robot programming</div>
+        <p class="ach-desc">A robotics competition focused on programming robots using PIC microcontroller architecture in Assembly language. I was awarded 1st place for developing an efficient low-level control program for the robot.</p>
+      </div>
+      <div class="ach-badge-wrap">
+        <div class="ach-badge">Award / Recognition</div>
+        <img src="/certifikaty/IMG_5650.JPG" class="ach-badge-img expandable">
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!------CONTACT------>
+<section class="section" id="contact">
+  <div class="eyebrow">04 — Contact</div>
+  <div class="contact-grid">
+    <div class="reveal">
+      <h2>Let's work<br><em>together.</em></h2>
+      <p class="c-blurb">Always open to interesting conversations, collaborations, and new opportunities. Drop me a message and I'll get back to you soon.</p>
+      <div class="c-links">
+        <a href="mailto:jura70494@gmail.com" class="clink">✉ <span class="clink-lbl">jura70494@gmail.com</span><span class="clink-arr">→</span></a>
+        <a href="https://www.linkedin.com/in/jiří-žák-8876a33a5?utm_source=share_via&utm_content=profile&utm_medium=member_ios" class="clink" target="_blank">in <span class="clink-lbl">linkedin.com/in/jiří-žák</span><span class="clink-arr">→</span></a>
+        <a href="https://github.com/jura339" class="clink" target="_blank">⌥ <span class="clink-lbl">github.com/jura339</span><span class="clink-arr">→</span></a>
+        <a href="#" class="clink">📍 <span class="clink-lbl">Your City, Country</span><span class="clink-arr">→</span></a>
+      </div>
+    </div>
+    <div class="c-form reveal" style="transition-delay:.15s">
+      <div class="f-row">
+        <div class="field"><label>Name</label><input type="text" placeholder="Jane Doe"/></div>
+        <div class="field"><label>Email</label><input type="email" placeholder="jane@example.com"/></div>
+      </div>
+      <div class="field"><label>Subject</label><input type="text" placeholder="What's this about?"/></div>
+      <div class="field"><label>Message</label><textarea placeholder="Tell me about your project or idea…"></textarea></div>
+      <button class="send-btn">Send message →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 — Jiří Žák. All rights reserved.</span>
+  <a href="#hero">↑ Back to top</a>
+</footer>
+<div id="lightbox">
+  <img id="lightbox-img">
+</div>
+<!----------------------------------------------------------------------------------------------->
+<script>
+  //Parallax
+  const parallaxItems = [
+    { el: document.getElementById('l1'),       speed: 0.05 },
+    { el: document.getElementById('l2'),       speed: 0.10 },
+    { el: document.getElementById('l3'),       speed: 0.18 },
+    { el: document.getElementById('l4'),       speed: 0.30 },
+    { el: document.getElementById('l5'),       speed: 0.44 },
+    { el: document.getElementById('l6'),       speed: 0.60 },
+    { el: document.getElementById('birds'),    speed: -0.05 },
+    { el: document.getElementById('heroText'), speed: 0.32 },
+  ];
+
+  let ticking = false;
+  let isMobile = false;
+  if (window.innerWidth < 768) {
+      isMobile = true;
+  }
+  function doParallax() {
+    if (isMobile) return;
+
+    const y = window.scrollY;
+
+    parallaxItems.forEach(({ el, speed }) => {
+        el.style.transform = `translateY(${y * speed}px)`;
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(doParallax); ticking = true; }
+  }, { passive: true });
+
+  //Nav style on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('dark', window.scrollY > window.innerHeight * 0.72);
+  }, { passive: true });
+
+  //Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }});
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  //Active nav link
+  const secs = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 220) cur = s.id; });
+    links.forEach(a => {
+      if (nav.classList.contains('dark'))
+        a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : '';
+      else a.style.color = '';
+    });
+  }, { passive: true });
+
+
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+
+document.querySelectorAll(".expandable").forEach(img => {
+  img.addEventListener("click", () => {
+    lightbox.classList.add("active");
+    lightboxImg.src = img.src;
+  });
+});
+
+lightbox.addEventListener("click", () => {
+  lightbox.classList.remove("active");
+});
+</script>
+</body>
+</html>
